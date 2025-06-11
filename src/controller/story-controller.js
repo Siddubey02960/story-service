@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../db/connection');
 const producer = require('../kafka');
 const userClient = require('../userClient');
 
