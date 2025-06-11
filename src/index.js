@@ -2,6 +2,7 @@ const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
 const path = require('path');
 const storyController = require('./controller/story-controller')
+const { invokeCron } = require('./cron-jobs/cron');
 
 const PROTO_PATH = path.join(__dirname, '../protos/story.proto');
 
@@ -73,7 +74,7 @@ function main() {
   server.addService(storyProto.UserService.service, storyServiceImpl);
   server.bind('0.0.0.0:5006', grpc.ServerCredentials.createInsecure());
   server.start();
-  require('./cron-jobs/cron');
+  invokeCron();
   console.log('storyService gRPC server running on port 5006');
 }
 
