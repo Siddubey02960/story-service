@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: userdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  story-service:
+    build: ./st-service
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: userdb
+    depends_on:
+      - postgres
+    ports:
+      - "5006:5006"
+    volumes:
+      - ./story-service:/usr/src/app
+    command: npm run dev
+
+volumes:
+  pgdata:

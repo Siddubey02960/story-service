@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package story;
+
+service StoryService {
+  rpc UploadStoryDraft(UploadStoryDraftRequest) returns (StoryRes ponse);
+  rpc FinalizeStory(FinalizeStoryRequest) returns (StoryResponse);
+  rpc GetStoriesFromFollowedUsers(GetStoriesRequest) returns (GetStoriesResponse);
+  rpc GetStoryViews(GetStoryViewsRequest) returns (GetStoryViewsResponse);
+  rpc ReplyToStory(ReplyRequest) returns (ReplyResponse);
+}
+
+message UploadStoryDraftRequest {
+  string userId = 1;
+  string mediaUrl = 2;
+  string musicId = 3;
+  string caption = 4;
+}
+
+message FinalizeStoryRequest {
+  string storyId = 1;
+}
+
+
+message ReplyRequest {
+  string storyId = 1;
+  string fromUserId = 2;
+  string message = 3;
+}
+
+message Story {
+  string id = 1;
+  string userId = 2;
+  string mediaUrl = 3;
+  string musicId = 4;
+  string caption = 5;
+  string createdAt = 6;
+  bool finalized = 7;
+}
+
+
+message StoryResponse {
+  Story story = 1;
+}
+
+
+message ReplyResponse {
+  string message = 1;
+}
+
+
+message GetStoriesRequest {
+  int32 userId = 1;
+  int32 page_size = 2;
+  int32 page_number = 3;
+}
+
+message GetStoriesResponse {
+  repeated int32 followerIds = 1;
+  int32 totalCount = 2;
+}
+
+
+message GetStoryViewsRequest {
+  int32 storyId = 1;
+  int32 page_size = 2;   
+  int32 page_number = 3; 
+}
+
+message GetStoryViewsResponse {
+  repeated Viewer viewers = 1;
+  int32 totalCount = 2;
+}
+
+message Viewer {
+  string userId = 1;
+  string created_at = 2;
+  int32 story_status =3;
+}
+
