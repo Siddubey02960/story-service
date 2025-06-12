@@ -1,6 +1,5 @@
 const db = require('../db/connection');
 const producer = require('../kafka');
-const userClient = require('../userClient');
 
 const uploadStoryDraft = async (call, callback) => {
   try {
