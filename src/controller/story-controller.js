@@ -5,6 +5,21 @@ const uploadStoryDraft = async (call, callback) => {
   try {
     const { userId, mediaUrl, musicId, caption } = call.request;
 
+    const { rows } = await db.query(
+      `SELECT COUNT(*) FROM stories
+       WHERE user_id = $1
+         AND created_at::date = CURRENT_DATE
+         AND finalized = true`,
+      [userId]
+    );
+    const count = parseInt(rows[0].count, 10);
+    if (count > 10) {
+      return callback({
+        code: grpc.status.RESOURCE_EXHAUSTED,
+        message: 'Max 10 stories can be added in 1 day',
+      });
+    }
+
     const result = await db.query(
       `INSERT INTO stories (user_id, media_url, music_id, caption)
        VALUES ($1, $2, $3, $4)
